@@ -16,8 +16,7 @@ public sealed record Error
     public string Message { get; }
     public ErrorType Type { get; }
     public string[]? ValidationErrors { get; } // Yeni Eklenen Özellik
-
-    // Constructor'ı güncelledik
+    
     private Error(string code, string message, ErrorType type, string[]? validationErrors = null)
     {
         Code = code;
@@ -62,10 +61,7 @@ public class Result
             throw new InvalidOperationException();
 
         IsSuccess = isSuccess;
-
-        // --- DÜZELTME BURADA ---
-        // Eğer başarılıysa, Error.None gelse bile biz onu NULL yaparız.
-        // Böylece JsonIgnore çalışır ve error alanı JSON'dan silinir.
+        
         Error = isSuccess ? null : error;
         
         SuccessMessage = successMessage;
