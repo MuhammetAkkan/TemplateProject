@@ -428,3 +428,6 @@ appsettings.*.json
 # Rider
 .idea/
 *.sln.DotSettings.user
+
+setup.ps1
+
