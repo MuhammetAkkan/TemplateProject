@@ -1,0 +1,41 @@
+﻿services:
+  # 1. VERİTABANI (PostgreSQL)
+  db:
+    image: postgres:16  # <-- "latest" YERİNE "16" YAZDIK.
+    container_name: template_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "123456"
+      POSTGRES_DB: TemplateV3
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # 2. CACHE (Redis)
+  redis:
+    image: redis:latest
+    container_name: template_redis
+    ports:
+      - "6380:6379"
+
+  # 3. SENİN API UYGULAMAN
+  api:
+    image: template-api
+    container_name: template_api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:8080" # Dışarıdan 5000 portundan erişilecek
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      # Appsettings'i burada eziyoruz. Host olarak 'db' ve 'redis' kullanıyoruz.
+      - ConnectionStrings__PostgreDefaultConnection=Host=db;Port=5432;Database=TemplateV3;Username=postgres;Password=123456
+      - ConnectionStrings__Redis=redis:6379
+    depends_on:
+      - db
+      - redis
+
+volumes:
+  pgdata:
