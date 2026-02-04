@@ -430,4 +430,4 @@ appsettings.*.json
 *.sln.DotSettings.user
 
 setup.ps1
-
+setup.ps1~
